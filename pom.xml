@@ -42,6 +42,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+			<version>4.17.2</version>
 		</dependency>
 
 		<dependency>
@@ -66,7 +67,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${project.parent.version}</version>
+				<version>3.0.0</version>
 				<configuration>
 					<excludes>
 						<exclude>
