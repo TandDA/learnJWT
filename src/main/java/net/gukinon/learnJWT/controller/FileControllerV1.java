@@ -20,8 +20,16 @@ public class FileControllerV1 {
     public List<FileEntity> getAllFiles(){
         return fileService.getAll();
     }
+    @GetMapping("/{id}")
+    public FileEntity getFileById(@PathVariable int id){
+        return fileService.findById(id);
+    }
     @PostMapping("/upload")
     public @ResponseBody String handleFileUpload(@RequestParam("file") MultipartFile file){
         return fileService.loadFile(file);
+    }
+    @DeleteMapping("/delete/{id}")
+    public void deleteFile(@PathVariable int id){
+        fileService.deleteById(id);
     }
 }

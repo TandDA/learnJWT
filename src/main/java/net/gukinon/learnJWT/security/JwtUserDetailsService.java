@@ -4,6 +4,7 @@ package net.gukinon.learnJWT.security;
 import net.gukinon.learnJWT.model.Role;
 import net.gukinon.learnJWT.repository.UserRepository;
 import net.gukinon.learnJWT.model.UserEntity;
+import net.gukinon.learnJWT.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,9 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-    private UserRepository userService;
+    private UserService userService;
     @Autowired
-    public JwtUserDetailsService(UserRepository userService){
+    public JwtUserDetailsService(UserService userService){
         this.userService = userService;
     }
     @Override
