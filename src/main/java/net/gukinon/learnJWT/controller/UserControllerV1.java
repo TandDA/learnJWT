@@ -7,6 +7,7 @@ import net.gukinon.learnJWT.model.UserEntity;
 import net.gukinon.learnJWT.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class UserControllerV1 {
     UserService userService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('developers:read')")
     public List<UserEntity> getAllUsers(){
         return userService.getAll();
     }

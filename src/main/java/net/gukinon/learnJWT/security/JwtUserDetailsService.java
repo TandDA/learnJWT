@@ -31,7 +31,11 @@ public class JwtUserDetailsService implements UserDetailsService {
         if(userEntity == null){
             throw new UsernameNotFoundException("User not found");
         }
-        return new User(userEntity.getUsername(), userEntity.getPassword(), mapRolesToAuthorities(userEntity.getRoles()));
+        return new User(userEntity.getUsername(), userEntity.getPassword(), mapRoleToAuthorities(userEntity.getRoles().get(0)));
+    }
+    private Collection<GrantedAuthority> mapRoleToAuthorities(Role roles){
+        return roles.getPermissionSet().stream().map(permission ->
+                new SimpleGrantedAuthority(permission.getName())).collect(Collectors.toList());
     }
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
