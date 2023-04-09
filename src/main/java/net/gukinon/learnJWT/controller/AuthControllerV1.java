@@ -8,7 +8,7 @@ import net.gukinon.learnJWT.model.Status;
 import net.gukinon.learnJWT.model.UserEntity;
 import net.gukinon.learnJWT.repository.RoleRepository;
 import net.gukinon.learnJWT.repository.UserRepository;
-import net.gukinon.learnJWT.security.JWTGenerator;
+import net.gukinon.learnJWT.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,16 +31,16 @@ public class AuthControllerV1 {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-    private JWTGenerator jwtGenerator;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public AuthControllerV1(AuthenticationManager authenticationManager, UserRepository userRepository,
-                            RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
+                            RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtGenerator = jwtGenerator;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
     @PostMapping("login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
@@ -49,23 +49,8 @@ public class AuthControllerV1 {
                         loginDto.getUsername(),
                         loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication);
+        UserEntity user = userRepository.findByUsername(loginDto.getUsername());
+        String token = jwtTokenProvider.generateToken(user.getUsername(),user.getRoles().get(0));
         return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
-    }
-    @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        if(userRepository.existsByUsername(registerDto.getUsername())){
-            return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
-        }
-        UserEntity user = new UserEntity();
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-
-        Role role = roleRepository.findByName("ROLE_USER");
-        user.setRoles(Collections.singletonList(role));
-        user.setStatus(Status.ACTIVE);
-        userRepository.save(user);
-
-        return new ResponseEntity<>("Register success",HttpStatus.OK);
     }
 }
