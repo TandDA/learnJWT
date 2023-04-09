@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity create(UserEntity userEntity) {
-        Role userRole = roleRepository.findByName("ROLE_USER");
+        Role userRole = roleRepository.findById(1).get();
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(userRole);
 

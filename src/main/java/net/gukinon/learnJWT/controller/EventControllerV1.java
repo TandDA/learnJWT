@@ -1,7 +1,10 @@
 package net.gukinon.learnJWT.controller;
 
+import net.gukinon.learnJWT.dto.EventDto;
 import net.gukinon.learnJWT.model.Event;
 import net.gukinon.learnJWT.model.FileEntity;
+import net.gukinon.learnJWT.model.Status;
+import net.gukinon.learnJWT.model.UserEntity;
 import net.gukinon.learnJWT.service.EventService;
 import net.gukinon.learnJWT.service.FileService;
 import net.gukinon.learnJWT.service.UserService;
@@ -23,13 +26,22 @@ public class EventControllerV1 {
     public List<Event> getAllEvents(){
         return eventService.getAll();
     }
-//    @PostMapping("add")
-//    public Event addEvent(@RequestParam("user_id") int user_id,
-//                          @RequestParam("file_id") int file_id) {
-////        FileEntity
-////        Event event = new Event();
-////
-////        eventService.create(event);
-////
-//    }
+    @GetMapping("/{id}")
+    public Event getEventById(@PathVariable int id){
+        return eventService.findById(id);
+    }
+    @PostMapping("add")
+    public Event addEvent(@RequestBody EventDto eventDto) {
+        Event event = new Event();
+        FileEntity fileEntity = fileService.findById(eventDto.getFile_id());
+        UserEntity userEntity = userService.findById(eventDto.getUser_id());
+        event.setFile(fileEntity);
+        event.setUserEntity(userEntity);
+        event.setStatus(Status.ACTIVE);
+        return eventService.create(event);
+    }
+    @DeleteMapping("delete/{id}")
+    public void deleteEventById(@PathVariable int id){
+        eventService.deleteById(id);
+    }
 }

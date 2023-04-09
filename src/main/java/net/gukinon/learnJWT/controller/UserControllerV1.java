@@ -22,6 +22,10 @@ public class UserControllerV1 {
     public List<UserEntity> getAllUsers(){
         return userService.getAll();
     }
+    @GetMapping("/{id}")
+    public UserEntity getUserById(@PathVariable int id){
+        return userService.findById(id);
+    }
     @PostMapping("add")
     public UserEntity createUser(@RequestBody RegisterDto registerDto){
         UserEntity userEntity = new UserEntity();
@@ -31,4 +35,9 @@ public class UserControllerV1 {
 
         return userService.create(userEntity);
     }
+    @DeleteMapping("delete/{id}")
+    public void deleteUserById(@PathVariable int id){
+        userService.deleteById(id);
+    }
+
 }
