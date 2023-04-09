@@ -63,8 +63,7 @@ public class AuthControllerV1 {
 
         Role role = roleRepository.findByName("ROLE_USER");
         user.setRoles(Collections.singletonList(role));
-        user.setStatus(Status.ACTIVE)
-        ;
+        user.setStatus(Status.ACTIVE);
         userRepository.save(user);
 
         return new ResponseEntity<>("Register success",HttpStatus.OK);

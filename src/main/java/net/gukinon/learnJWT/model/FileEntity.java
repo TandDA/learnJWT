@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "events")
+@Table(name = "files")
 public class FileEntity extends BaseEntity {
     @Column(name = "path")
     private String path;

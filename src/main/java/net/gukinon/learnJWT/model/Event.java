@@ -13,6 +13,6 @@ public class Event extends BaseEntity{
     private UserEntity userEntity;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "file_id")
     private FileEntity file;
 }
